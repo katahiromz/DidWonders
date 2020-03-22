@@ -1,0 +1,31 @@
+////////////////////////////////////////////////////////////////////////////
+// stdafx.h
+// Copyright (C) 2015 Katayama Hirofumi MZ.
+////////////////////////////////////////////////////////////////////////////
+
+#if defined(MBCS) && defined(UNICODE)
+    #error You lose.
+#endif
+
+#if defined(_MBCS) && defined(_UNICODE)
+    #error You lose.
+#endif
+
+#if !defined(_MBCS) && !defined(_UNICODE)
+    #define _MBCS
+#endif
+
+////////////////////////////////////////////////////////////////////////////
+
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <windows.h>
+#include <imagehlp.h>       // CheckSumMappedFile
+
+#include <tchar.h>
+#include <cstdio>
+#include <cassert>
+
+#include "dllexpdumper.hpp"
+
+////////////////////////////////////////////////////////////////////////////

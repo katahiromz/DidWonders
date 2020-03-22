@@ -1,0 +1,13 @@
+*.o
+*.sdf
+*.suo
+*.user
+*.filters
+*.opensdf
+Debug
+Release
+x64
+!Debug/redirector.exe
+!Release/redirector.exe
+!x64/Debug/redirector.exe
+!x64/Release/redirector.exe

@@ -1,0 +1,5 @@
+add_executable(iwon iwon.cpp)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set_target_properties(iwon PROPERTIES OUTPUT_NAME "iwon64")
+endif()
+target_link_libraries(iwon TypeSystem)
