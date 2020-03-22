@@ -689,6 +689,8 @@ public:
     bool IsEnumType(CR_TypeID tid) const;
     // is it a void type?
     bool IsVoidType(CR_TypeID tid) const;
+    // is it a handle type?
+    bool IsHandleType(CR_TypeID tid) const;
 
     //
     // ResolveAlias

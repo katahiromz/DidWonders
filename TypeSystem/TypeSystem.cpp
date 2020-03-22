@@ -4805,10 +4805,14 @@ std::string CR_NameScope::DecoratedTypeName(CR_TypeID tid) const
     if (IsVoidType(tid)) {
         ret += "v:";
     } else if (IsPointerType(tid)) {
-        auto base = ResolvePointer(tid);
-        auto size = SizeOfType(base) * 8;
-        std::sprintf(buf, "p%u:", (int)size);
-        ret += buf;
+        if (IsHandleType(tid)) {
+            ret += "h:";
+        } else {
+            auto base = ResolvePointer(tid);
+            auto size = SizeOfType(base) * 8;
+            std::sprintf(buf, "p%u:", (int)size);
+            ret += buf;
+        }
     } else if (IsIntegralType(tid) || IsEnumType(tid)) {
         if (IsUnsignedType(tid)) {
             if (SizeOfType(tid) <= 4)
@@ -4872,6 +4876,23 @@ bool CR_NameScope::IsVoidType(CR_TypeID tid) const
         }
     }
     return false;
+}
+
+bool CR_NameScope::IsHandleType(CR_TypeID tid) const
+{
+    if (!IsPointerType(tid))
+        return false;
+    tid = ResolvePointer(tid);
+    tid = ResolveAlias(tid);
+    if (!IsStructType(tid))
+        return false;
+
+    auto& type = LogType(tid);
+    auto& st = LogStruct(type.m_sub_id);
+    if (st.m_members.size() != 1)
+        return false;
+
+    return st.m_members[0].m_name == "unused";
 }
 
 ////////////////////////////////////////////////////////////////////////////
