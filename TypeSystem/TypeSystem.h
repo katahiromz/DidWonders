@@ -696,6 +696,7 @@ public:
 
     CR_TypeID ResolveAlias(CR_TypeID tid) const;
     CR_TypeID ResolveAliasAndCV(CR_TypeID tid) const;
+    CR_TypeID ResolvePointer(CR_TypeID tid) const;
 
     //
     // accessors

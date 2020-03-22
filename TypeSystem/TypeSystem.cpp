@@ -2092,6 +2092,19 @@ CR_TypeID CR_NameScope::ResolveAlias(CR_TypeID tid) const {
     return tid;
 } // CR_NameScope::ResolveAlias
 
+CR_TypeID CR_NameScope::ResolvePointer(CR_TypeID tid) const {
+    tid = ResolveAlias(tid);
+    if (tid == cr_invalid_id)
+        return cr_invalid_id;
+
+    auto& type = LogType(tid);
+    if (type.m_flags & TF_POINTER) {
+        return type.m_sub_id;
+    } else {
+        return cr_invalid_id;
+    }
+} // CR_NameScope::ResolvePointer
+
 CR_TypeID CR_NameScope::ResolveAliasAndCV(CR_TypeID tid) const {
     while (tid != cr_invalid_id) {
         tid = ResolveAlias(tid);
@@ -4787,11 +4800,15 @@ bool CR_NameScope::SaveToFiles(
 std::string CR_NameScope::DecoratedTypeName(CR_TypeID tid) const
 {
     std::string ret;
+    char buf[32];
     auto name = NameFromTypeID(tid);
     if (IsVoidType(tid)) {
         ret += "v:";
     } else if (IsPointerType(tid)) {
-        ret += "p:";
+        auto base = ResolvePointer(tid);
+        auto size = SizeOfType(base) * 8;
+        std::sprintf(buf, "p%u:", (int)size);
+        ret += buf;
     } else if (IsIntegralType(tid) || IsEnumType(tid)) {
         if (IsUnsignedType(tid)) {
             if (SizeOfType(tid) <= 4)
@@ -4811,7 +4828,6 @@ std::string CR_NameScope::DecoratedTypeName(CR_TypeID tid) const
             ret += "f64:";
     } else {
         auto size = SizeOfType(tid) * 8;
-        char buf[32];
         std::sprintf(buf, "r%u:", (int)size);
         ret += buf;
     }
