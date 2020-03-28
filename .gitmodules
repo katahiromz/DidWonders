@@ -1,0 +1,3 @@
+[submodule "TypeSystem"]
+	path = TypeSystem
+	url = https://github.com/katahiromz/TypeSystem.git
